@@ -1,30 +1,26 @@
-from graphics import Window, Line, Point
-from cell import cell
+from graphics import Window
+# from cell import cell
+from maze import Maze
 import random
-
+import sys
 
 
 def main():
-    window = Window(1080, 720)
-    # window.draw_line(Line(Point(100, 100), Point(350, 450)), "Red")
-    cells: list[cell] = []
-    for i in range(50,750, 50):
-        for j in range(10, 550, 50):
-            cells.append(cell(i, j, i+50, j+50, window))
-    for c in cells:
-        i = random.randint(1,4)
-        if i == 1:
-            c.has_left_wall = False
-        elif i == 2:
-            c.has_right_wall = False
-        elif i == 3:
-            c.has_bottom_wall = False
-        else:
-            c.has_top_wall = False
-        c.draw()
-
-    cells[2].draw_move(cells[13])
-    window.wait_for_close()
-
+    num_rows = 12
+    num_cols = 16
+    margin = 50
+    screen_x = 800
+    screen_y = 600
+    cell_size_x = (screen_x - 2 * margin) // num_cols
+    cell_size_y = (screen_y - 2 * margin) // num_rows
+    win = Window(screen_x, screen_y)
+    if len(sys.argv) > 1:
+        print(sys.argv[1])
+        maze = Maze(margin, margin, num_rows, num_cols, cell_size_x, cell_size_y, win, sleep=float(sys.argv[1]))
+    else:
+        maze = Maze(margin, margin, num_rows, num_cols, cell_size_x, cell_size_y, win)
+    maze.solve()
+    win.wait_for_close()
+    
 if __name__ == "__main__":
     main()
